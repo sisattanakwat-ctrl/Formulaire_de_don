@@ -7,15 +7,15 @@ RUN npm install -g bun
 # Set working directory
 WORKDIR /app
 
-# Install ALL dependencies (including devDependencies for build)
+# Copy package.json AND prisma schema (needed for postinstall)
 COPY package.json ./
+COPY prisma ./prisma/
+
+# Install dependencies (this will run postinstall script)
 RUN bun install
 
-# Copy application files
+# Copy the rest of the application files
 COPY . .
-
-# Generate Prisma Client
-RUN npx prisma generate
 
 # Build Next.js
 RUN bun run build
