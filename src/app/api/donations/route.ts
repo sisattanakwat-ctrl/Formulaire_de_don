@@ -90,6 +90,8 @@ export async function POST(request: NextRequest) {
             lastName,
             firstName,
             address,
+            postalCode,
+            commune,
             email,
             phone
           }
@@ -102,6 +104,8 @@ export async function POST(request: NextRequest) {
             lastName,
             firstName,
             address,
+            postalCode,
+            commune,
             email
           }
         });

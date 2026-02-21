@@ -3,19 +3,19 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-  "dev": "next dev -p 3000 2>&1 | tee dev.log",
-  "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
-  "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
-  "lint": "eslint .",
-  "postinstall": "npx prisma generate && npx prisma db push", 
-  "db:push": "prisma db push",
-  "db:generate": "prisma generate",
-  "db:migrate": "prisma migrate dev",
-  "db:reset": "prisma migrate reset",
-  "vercel:login": "vercel login",
-  "vercel:deploy": "vercel --prod",
-  "vercel:preview": "vercel"
-},
+    "dev": "next dev -p 3000 2>&1 | tee dev.log",
+    "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+    "start": "npx prisma db push && NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
+    "lint": "eslint .",
+    "postinstall": "npx prisma generate",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
+    "vercel:login": "vercel login",
+    "vercel:deploy": "vercel --prod",
+    "vercel:preview": "vercel"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@dnd-kit/core": "^6.3.1",
@@ -104,7 +104,4 @@
     "tw-animate-css": "^1.3.5",
     "typescript": "^5"
   }
-
-  
 }
-
