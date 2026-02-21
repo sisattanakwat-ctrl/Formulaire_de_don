@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "buildCommand": "bun run build",
+  "installCommand": "bun install",
+  "framework": "nextjs",
+  "regions": ["cdg1"],
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_APP_URL": "${NEXT_PUBLIC_APP_URL}",
+    "DATABASE_URL": "${DATABASE_URL}",
+    "JWT_SECRET": "${JWT_SECRET}",
+    "SMTP_HOST": "${SMTP_HOST}",
+    "SMTP_PORT": "${SMTP_PORT}",
+    "SMTP_USER": "${SMTP_USER}",
+    "SMTP_PASSWORD": "${SMTP_PASSWORD}",
+    "SMTP_FROM": "${SMTP_FROM}"
+  }
+}

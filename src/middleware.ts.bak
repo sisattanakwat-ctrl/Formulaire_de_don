@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+
+export async function middleware(request: NextRequest) {
+  const cookie = request.cookies.get('authToken');
+  const token = cookie?.value || request.headers.get('authorization')?.replace('Bearer ', '');
+
+  const pathname = request.nextUrl.pathname;
+
+  // Decode JWT token to get user info
+  let userRole = null;
+  if (token) {
+    try {
+      // JWT token format: header.payload.signature
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        // Decode the payload (middle part)
+        const payload = JSON.parse(
+          Buffer.from(parts[1], 'base64').toString()
+        );
+        userRole = payload.role;
+
+        // Log for debugging
+        console.log('[Middleware] Token decoded successfully, role:', userRole);
+      }
+    } catch (e) {
+      console.error('[Middleware] Error decoding token:', e);
+      // Invalid token, userRole stays null
+    }
+  } else {
+    console.log('[Middleware] No token found');
+  }
+
+  // Allow access to login, admin init, and auth API
+  if (pathname === '/login' || pathname.startsWith('/api/auth')) {
+    return NextResponse.next();
+  }
+
+  // Require authentication for main page
+  if (!token && pathname === '/') {
+    const url = new URL('/login', request.url);
+    return NextResponse.redirect(url);
+  }
+
+  // Require admin role for admin page
+  if (pathname === '/admin' && userRole !== 'admin') {
+    const url = new URL('/', request.url);
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+};
